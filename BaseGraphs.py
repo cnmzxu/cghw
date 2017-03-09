@@ -10,7 +10,6 @@ def drawPoint(point):
 def drawLine(vert1, vert2):
     #use Bresenham Algorithm
     x1, y1, x2, y2 = vert1[0], vert1[1], vert2[0], vert2[1]
-    #print(x1, y1, x2, y2)
     if x1 > x2:
         x1, x2 = x2, x1
         vert1, vert2 = vert2, vert1
@@ -62,4 +61,45 @@ def drawEllipse(vert1, vert2):
         x1, x2 = x2, x1
     if y1 > y2:
         y1, y2 = y2, y1
-
+    a = (x2 - x1) // 2
+    b = (y2 - y1) // 2
+    dx = (x2 + x1 + 1) // 2
+    dy = (y2 + y1 + 1) // 2
+    glBegin(GL_POINTS)
+    x = 0
+    y = b
+    p = b * b - a * a * b + (a * a) // 4
+    while(True):
+        glVertex2i(x + dx, y + dy)
+        glVertex2i(-x + dx, y + dy)
+        glVertex2i(x + dx, -y + dy)
+        glVertex2i(-x + dx, -y + dy)
+        if b * b * x >= a * a * y:
+            break
+        if p < 0:
+            p += b * b * (2 * x + 3)
+            x += 1
+        else:
+            p += b * b * (2 * x + 3) - 2 * a * a * (y - 1)
+            x += 1
+            y -= 1
+    
+    x = a
+    y = 0
+    p = a * a - b * b * a + (b * b) // 4
+    while(True):
+        glVertex2i(x + dx, y + dy)
+        glVertex2i(-x + dx, y + dy)
+        glVertex2i(x + dx, -y + dy)
+        glVertex2i(-x + dx, -y + dy)
+        if a * a * y > b * b * x:
+            break
+        if p < 0:
+            p += a * a * (2 * y + 3)
+            y += 1
+        else:
+            p += a * a * (2 * y + 3) - 2 * b * b * (x - 1)
+            y += 1
+            x -= 1
+        
+    glEnd()

@@ -4,20 +4,18 @@ from OpenGL.GLUT import *
 from BaseGraphs import *
 import time
 
-HEIGHT = 480
-WIDTH = 680
+HEIGHT = 690
+WIDTH = 1390
 
 def init():
     glClearColor(0, 0, 0, 0)
     glMatrixMode(GL_PROJECTION)
     gluOrtho2D(0, WIDTH, 0, HEIGHT)
 
-Lines = [(0, 0), (100, 100), (200, 300), (400, 233), (600, 133)]
-
 def draw():
     glClear(GL_COLOR_BUFFER_BIT)
     i = 0
-    drawPolyv(Lines)
+    drawEllipse((10, 10), (1380, 680))
     glFlush()
 
 glutInit()
