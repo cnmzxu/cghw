@@ -47,14 +47,6 @@ def drawLine(vert1, vert2):
                 glVertex2i(yList[x - x1], x1 + x2 - x)
     glEnd()
 
-def drawPolyv(args):
-    for i in range(len(args) - 1):
-        drawLine(args[i], args[i + 1])
-    drawLine(args[-1], args[0])
-
-def drawPoly(*args):
-    drawPolyv(args)
-
 def drawEllipse(vert1, vert2):
     x1, y1, x2, y2 = vert1[0], vert1[1], vert2[0], vert2[1]
     if x1 > x2:
