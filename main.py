@@ -1,13 +1,10 @@
 from OpenGL.GL import *
 from OpenGL.GLU import *
 from OpenGL.GLUT import *
-from BaseGraphs import *
+from DrawGraphs import *
 import threading
 HEIGHT = 480
 WIDTH = 680
-POINTS = []
-LINES = []
-ELLIPSES = []
 
 def init():
     glutInit()
@@ -19,32 +16,25 @@ def init():
     glMatrixMode(GL_PROJECTION)
     gluOrtho2D(0, WIDTH, 0, HEIGHT)
 
-def draw():
-    global POINTS, LINES, ELLIPSES
-    glClear(GL_COLOR_BUFFER_BIT)
-    for point in POINTS:
-        drawPoint(point)
-    for line in LINES:
-        drawLine(line[0], line[1])
-    for ellipse in ELLIPSES:
-        drawEllipse(ellipse[0], ellipse[1])
-    glFlush()
-
 def inputLoop():
-    global POINTS, LINES, ELLIPSES
-    cmds = {"point" : lambda arg: POINTS.append((int(arg[0]), int(arg[1]))), 
-            "line" : lambda arg: LINES.append(((int(arg[0]), int(arg[1])), (int(arg[2]), int(arg[3])))),
-            "ellipse" : lambda arg: ELLIPSES.append(((int(arg[0]), int(arg[1])),(int(arg[2]), int(arg[3])))),
-            "quit" : lambda arg: exit(0)}
+    cmds = {"help" : myhelp,
+            "point" : add_point,
+            "line" : add_line,
+            "ellipse" : add_ellipse,
+            "polygon" : add_polygon,
+            "clear" : clear
+            }
+    print("You can type 'help' for some help.")
     while(True):
         cmd = input(">>")
         cmd = cmd.split()
-        cmds.get(cmd[0], lambda arg: print("no such command"))(cmd[1:])
+        def error(args):
+            print("No Such Command!")
+        cmds.get(cmd[0], error)(cmd[1:])
 
 
 t = threading.Thread(target = inputLoop)
 t.start()
-
 init()
 glutDisplayFunc(draw)
 glutIdleFunc(draw)
