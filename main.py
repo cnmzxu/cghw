@@ -22,6 +22,8 @@ def inputLoop():
             "line" : add_line,
             "ellipse" : add_ellipse,
             "polygon" : add_polygon,
+            "filledpolygon": add_filled_polygon,
+            "spline" : add_splines,
             "clear" : clear
             }
     print("You can type 'help' for some help.")

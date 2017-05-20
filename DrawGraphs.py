@@ -3,20 +3,24 @@ from BaseGraphs import *
 POINTS = []
 LINES = []
 ELLIPSES = []
+FILLEDPOLYGONS = []
 POLYGONS = []
+SPLINES = []
 
 HELP = """
 Commands:
-    help:       Print help information
-    point:      Need 2 agrues x, y. Draw a point in (x, y)
-    line:       Need 4 argues x1, y1, x2, y2. Draw a line between (x1, y1) and (x2, y2)
-    ellipse:    Need 4 argues x1, y1, x2, y2. Draw a ellipse in (x1, y1) and (x2, y2)
-    polygon:    Need more than 6 argues x1, y1, x2, y2, x3, y3. Draw a polygon
-    clear:      Clear the graph
+    help:             Print help information
+    point:            Need 2 agrues x, y. Draw a point in (x, y)
+    line:             Need 4 argues x1, y1, x2, y2. Draw a line between (x1, y1) and (x2, y2)
+    ellipse:          Need 4 argues x1, y1, x2, y2. Draw a ellipse in (x1, y1) and (x2, y2)
+    filledpolygon:    Need 3 RGB values and more than 6 argues x1, y1, x2, y2, x3, y3... Draw a filled polygon
+    polygon:          Need more than 6 argues x1, y1, x2, y2, x3, y3... Draw a polygon with lines
+    spline:           Need more than 8 argues x1, y1, x2, y2, x3, y3, x4, y4... Draw a spline
+    clear:            Clear the graph
 """
 
 def draw():
-    global POINTS, LINES, ELLIPSES, POLYGONS
+    global POINTS, LINES, ELLIPSES, POLYGONS, UNFILLEDPOLYGONS, SPLLINES
     glClear(GL_COLOR_BUFFER_BIT)
     for point in POINTS:
         drawPoint((int(point[0]), int(point[1])))
@@ -25,9 +29,12 @@ def draw():
     for ellipse in ELLIPSES:
         drawEllipse((int(ellipse[0]), int(ellipse[1])), (int(ellipse[2]), int(ellipse[3])))
     for polygon in POLYGONS:
-        for i in range(len(polygon)//2 - 1):
-            drawLine((int(polygon[2 * i]), int(polygon[2 * i + 1])), (int(polygon[2 * i + 2]), int(polygon[2 * i + 3])))
-        drawLine((int(polygon[-2]), int(polygon[-1])), (int(polygon[0]), int(polygon[1])))
+        drawUnfilledPolygon(polygon)
+    for polygon in FILLEDPOLYGONS:
+        drawFilledPolygon(polygon[0], polygon[1])
+    for spline in SPLINES:
+        BezierSpline(spline)
+    
     glFlush()
 
 def check_arg_num(mode, n):
@@ -65,9 +72,22 @@ def add_polygon(args):
     global POLYGONS
     POLYGONS.append(tuple(args))
 
+def add_filled_polygon(args):
+    global FILLEDPOLYGONS
+    if (len(args) % 2 != 1 or len(args) < 9):
+        print("args error")
+    else:
+        FILLEDPOLYGONS.append((args[3:], args[0:3]))
+
+@check_arg_num("mt", 8)
+def add_splines(args):
+    global SPLINES
+    SPLINES.append(args)
+
+
 def clear(args):
-    global POINTS, LINES, ELLIPSES, POLYGONS
-    POINTS, LINES, ELLIPSES, POLYGONS = [], [], [], []
+    global POINTS, LINES, ELLIPSES, POLYGONS, FILLEDPOLYGONS, SPLINES
+    POINTS, LINES, ELLIPSES, POLYGONS, FILLEDPOLYGONS, SPLINES = [], [], [], [], [], []
 
 def myhelp(args):
     print(HELP)

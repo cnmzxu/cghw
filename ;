@@ -193,25 +193,11 @@ def BezierSpline(nodes):
     n = len(x)
     
     def drawspline(x1, y1, x2, y2, x3, y3, x4, y4):
-        glColor3f(1, 0, 0)
-        if (x1 >=0 and y1 >= 0):
-            glVertex2f(x1, y1)
-        if (x2 >=0 and y2 >= 0):
-            glVertex2f(x2, y2)
-        if (x3 >=0 and y3 >= 0):
-            glVertex2f(x3, y3)
-        if (x4 >=0 and y4 >= 0):
-            glVertex2f(x4, y4)
-        glColor3f(1, 1, 1)
         if (abs(x1 - x2) <= 1 and abs(x1 - x3) <= 1 and abs(x1 - x4) <= 1 and abs(y1 - y2) <= 1 and abs(y1 - y3) <= 1 and abs(y1 - y4) <= 1):
-            if (x1 >=0 and y1 >= 0):
-                glVertex2f(x1, y1)
-            if (x2 >=0 and y2 >= 0):
-                glVertex2f(x2, y2)
-            if (x3 >=0 and y3 >= 0):
-                glVertex2f(x3, y3)
-            if (x4 >=0 and y4 >= 0):
-                glVertex2f(x4, y4)
+            glVertex2f(x1, y1)
+            glVertex2f(x2, y2)
+            glVertex2f(x3, y3)
+            glVertex2f(x4, y4)
             return
         else:
             x11 = (x1 + x2) / 2
@@ -227,9 +213,8 @@ def BezierSpline(nodes):
             y21 = (y11 + y12) / 2
             y22 = (y12 + y13) / 2
             y31 = (y21 + y22) / 2
-            
-            if (x31 >= 0 and y31 >= 0):
-                glVertex2f(x31, y31)
+
+            glVertex2f(x31, y31)
             drawspline(x1, y1, x11, y11, x21, y21, x31, y31)
             drawspline(x31, y31, x22, y22, x13, y13, x4, y4)
     
